@@ -14,7 +14,7 @@ const BINARIES = {
   win32: path.resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Windows-x86_64', 'bin'),
   win64: path.resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Windows-x86_64', 'bin'),
   darwin: path.resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Darwin-x86_64', 'bin'),
-  linux: path.resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Linux-x86_64', 'bin'),
+  linux: path.resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Linux-x86_64-static', 'bin'),
 };
 
 const binaryPath = BINARIES[platform];
