@@ -1,18 +1,25 @@
 const spawn = require('cross-spawn');
 const path = require('path');
 
-module.exports = (_options) => {
-  const {
-    command, platform, settings,
-  } = _options;
+module.exports = _options => {
+  const { command, platform, settings } = _options;
 
   const binaryString = path.join(platform.binaryPath, command);
+
+  // have to specify shared library path on linux for whatever reason
+  if (platform.platform === 'linux') {
+    settings.env['LD_LIBRARY_PATH'] = `${process.env.LD_LIBRARY_PATH}:${path.resolve(
+      path.dirname(platform.binaryPath),
+      '..',
+      'lib'
+    )}`;
+  }
 
   return function basicWrapper(_options2, _callback) {
     let callback = _callback;
     let options = _options2;
     // let execString = `${binaryString}`;
-    const env = settings.env || {};
+    const env = Object.assign(process.env, settings.env || {});
 
     if (!callback && typeof options === 'function') {
       callback = options;
@@ -44,16 +51,16 @@ module.exports = (_options) => {
      * might take a while and have periodic updates (moving files, etc), use streaming-wrapper.
      */
     /* eslint no-return-assign: ["error", "except-parens"] */
-    child.stdout.on('data', (data) => {
+    child.stdout.on('data', data => {
       stdout += data;
       // combined += data;
     });
-    child.stderr.on('data', (data) => {
+    child.stderr.on('data', data => {
       stderr += data;
       // combined += data;
     });
     child.on('error', callback);
-    child.on('close', (code) => {
+    child.on('close', code => {
       if (options.verbose || settings.verbose) {
         console.log('Process closed with code:', code);
       }

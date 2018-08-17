@@ -40,7 +40,6 @@ test('Error on non-dicom', () => {
       return new Promise(resolve => {
         gdcmconv({ args: ['--raw', inputFile, outputFile] }, (err, output) => {
           expect(err).not.toBeNull();
-          console.log(output);
           return resolve();
         });
       });
