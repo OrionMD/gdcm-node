@@ -1,4 +1,4 @@
-const { gdcmconv } = require('../index')();
+const { gdcmconv } = require('../index')({ verbose: true });
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -24,7 +24,6 @@ test('Convert all DICOM files to raw', () => {
       return new Promise((resolve) => {
         gdcmconv({ args: ['--raw', inputFile, outputFile] }, (err, output) => {
           expect(err).toBeNull();
-          console.log(output);
           return resolve();
         });
       });

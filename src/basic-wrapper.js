@@ -8,11 +8,13 @@ module.exports = _options => {
 
   // have to specify shared library path on linux for whatever reason
   if (platform.platform === 'linux') {
-    settings.env['LD_LIBRARY_PATH'] = `${process.env.LD_LIBRARY_PATH}:${path.resolve(
-      path.dirname(platform.binaryPath),
-      '..',
-      'lib'
-    )}`;
+    settings.env = Object.assign(settings.env || {}, {
+      LD_LIBRARY_PATH: `${process.env.LD_LIBRARY_PATH}:${path.resolve(
+        path.dirname(platform.binaryPath),
+        '..',
+        'lib'
+      )}`,
+    });
   }
 
   return function basicWrapper(_options2, _callback) {
