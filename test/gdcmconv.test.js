@@ -1,4 +1,4 @@
-const { gdcmconv } = require('../index')({ verbose: true });
+const { gdcmconv } = require('../index')();
 const fs = require('fs-extra');
 const path = require('path');
 
