@@ -10,7 +10,7 @@ module.exports = _options => {
   if (platform.platform === 'linux') {
     settings.env = Object.assign(settings.env || {}, {
       LD_LIBRARY_PATH: `${process.env.LD_LIBRARY_PATH}:${path.resolve(
-        path.dirname(platform.binaryPath),
+        platform.binaryPath,
         '..',
         'lib'
       )}`,
