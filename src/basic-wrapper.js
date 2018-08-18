@@ -6,17 +6,6 @@ module.exports = _options => {
 
   const binaryString = path.join(platform.binaryPath, command);
 
-  // have to specify shared library path on linux for whatever reason
-  if (platform.platform === 'linux') {
-    settings.env = Object.assign(settings.env || {}, {
-      LD_LIBRARY_PATH: `${process.env.LD_LIBRARY_PATH}:${path.resolve(
-        platform.binaryPath,
-        '..',
-        'lib'
-      )}`,
-    });
-  }
-
   return function basicWrapper(_options2, _callback) {
     let callback = _callback;
     let options = _options2;

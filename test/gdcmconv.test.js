@@ -13,7 +13,7 @@ beforeAll(() => {
 });
 
 afterAll(() => {
-  return fs.remove(outputPath);
+  // return fs.remove(outputPath);
 });
 
 test('Convert all DICOM files to raw', () => {
