@@ -1,12 +1,13 @@
 {
   "name": "gdcm-node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Node wrapper for GDCM DICOM library",
   "main": "index.js",
   "author": "Jason Hostetter MD",
   "license": "UNLICENSED",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "node ./postinstall.js"
   },
   "jest": {
     "testEnvironment": "node",
