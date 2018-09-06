@@ -11,10 +11,18 @@ const SUPPORTED_PLATFORMS = [
 ];
 
 const BINARIES = {
-  win32: path.resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Windows-x86_64', 'bin'),
-  win64: path.resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Windows-x86_64', 'bin'),
-  darwin: path.resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Darwin-x86_64', 'bin'),
-  linux: path.resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Linux-x86_64', 'bin'),
+  win32: path
+    .resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Windows-x86_64', 'bin')
+    .replace('app.asar', 'app.asar.unpacked'),
+  win64: path
+    .resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Windows-x86_64', 'bin')
+    .replace('app.asar', 'app.asar.unpacked'),
+  darwin: path
+    .resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Darwin-x86_64', 'bin')
+    .replace('app.asar', 'app.asar.unpacked'),
+  linux: path
+    .resolve(__dirname, '..', 'lib', 'gdcm', 'GDCM-2.8.7-Linux-x86_64', 'bin')
+    .replace('app.asar', 'app.asar.unpacked'),
 };
 
 const binaryPath = BINARIES[platform];
