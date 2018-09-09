@@ -6,7 +6,7 @@
   "author": "Jason Hostetter MD",
   "license": "UNLICENSED",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand --forceExit",
     "postinstall": "node ./postinstall.js"
   },
   "jest": {
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "cross-spawn": "^6.0.5",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "threads": "^0.12.0"
   }
 }
