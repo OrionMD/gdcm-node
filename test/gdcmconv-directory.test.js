@@ -5,26 +5,51 @@ const path = require('path');
 const dirPath = path.resolve(__dirname, 'data');
 const outputPath = path.join(dirPath, 'output');
 
-// const start = new Date();
-// const tick = setInterval(
-//   () => console.log('hey', (new Date().getTime() - start.getTime()) / 1000),
-//   200
-// );
-
 afterAll(() => {
-  // clearInterval(tick);
   return fs.remove(outputPath);
 });
 
 test('Convert all DICOM files in directory to raw', async () => {
   await fs.remove(outputPath); // function should create outputPath if it doesn't exist
   return new Promise((resolve, reject) => {
-    gdcmconv({ args: ['--raw', '--directory', dirPath, outputPath] }, (err, output) => {
+    const pool = gdcmconv(
+      { args: ['--raw', '--directory', dirPath, outputPath] },
+      (err, output) => {
+        expect(err).toBe(null);
+        const successes = output.filter(o => o.status === 'success');
+        const failures = output.filter(o => o.status === 'error');
+        expect(successes.length).toBe(3);
+        expect(failures.length).toBeGreaterThanOrEqual(1);
+        return resolve(successes);
+      }
+    );
+  });
+});
+
+test('Convert all DICOM files in directory to raw using events instead of callback', async () => {
+  await fs.remove(outputPath); // function should create outputPath if it doesn't exist
+  return new Promise((resolve, reject) => {
+    const pool = gdcmconv({ args: ['--raw', '--directory', dirPath, outputPath] }, (err) => {
       expect(err).toBe(null);
-      const successes = output.filter(o => o.status === 'success');
-      const failures = output.filter(o => o.status === 'error');
-      expect(successes.length).toBe(3);
+    });
+    const errors = [];
+    const successes = [];
+    const failures = [];
+    pool.on('file-done', data => {
+      successes.push(data);
+    });
+    pool.on('file-error', data => {
+      // job specific errors with some additional info
+      failures.push(data);
+    });
+    pool.on('error', (job, error) => {
+      // raw errors from threads
+      errors.push(error);
+    });
+    pool.on('complete', data => {
       expect(failures.length).toBeGreaterThanOrEqual(1);
+      expect(errors.length).toBeGreaterThanOrEqual(1);
+      expect(successes.length).toBe(3);
       return resolve();
     });
   });

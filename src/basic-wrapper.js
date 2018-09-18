@@ -76,7 +76,10 @@ module.exports = _options => {
               // console.log('Everything done, shutting down the thread pool.');
               pool.killAll();
               callback(null, processingResults);
+              pool.emit('complete', processingResults);
             });
+          pool.run(modulePath);
+
           filenames.forEach(filename => {
             const fileInPath = path.join(inPath, filename);
             const fileOutPath = path.join(outPath, filename);
@@ -84,25 +87,27 @@ module.exports = _options => {
             args2.splice(args2.length - 2, 2, fileInPath, fileOutPath);
             // console.log(`Starting thread with command ${command} and args: ${args2}`);
             pool
-              .run(modulePath)
               .send({
                 command,
                 args: args2,
               })
               .on('done', function(job) {
-                // console.log('Job done:', job);
-                processingResults.push({
+                const result = {
                   file: fileInPath,
                   status: 'success',
-                });
+                };
+                processingResults.push(result);
+                pool.emit('file-done', result);
               })
               .on('error', function(error) {
                 // console.error('Job errored:', job);
-                processingResults.push({
+                const result = {
                   file: fileInPath,
                   status: 'error',
                   message: error.message,
-                });
+                };
+                processingResults.push(result);
+                pool.emit('file-error', result);
               });
           });
         })
