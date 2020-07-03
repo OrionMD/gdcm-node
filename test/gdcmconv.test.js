@@ -18,29 +18,21 @@ afterAll(() => {
 
 test('Convert all DICOM files to raw', () => {
   return Promise.all(
-    dicomFiles.map(file => {
+    dicomFiles.map((file) => {
       const inputFile = path.join(dirPath, file);
       const outputFile = path.join(outputPath, file + '.out');
-      return new Promise((resolve) => {
-        gdcmconv({ args: ['--raw', inputFile, outputFile] }, (err, output) => {
-          expect(err).toBeNull();
-          return resolve();
-        });
-      });
+      return gdcmconv({ args: ['--raw', inputFile, outputFile] });
     })
   );
 });
 
 test('Error on non-dicom', () => {
   return Promise.all(
-    nonDicomFiles.map(file => {
+    nonDicomFiles.map((file) => {
       const inputFile = path.join(dirPath, file);
       const outputFile = path.join(outputPath, file + '.out');
-      return new Promise(resolve => {
-        gdcmconv({ args: ['--raw', inputFile, outputFile] }, (err, output) => {
-          expect(err).not.toBeNull();
-          return resolve();
-        });
+      gdcmconv({ args: ['--raw', inputFile, outputFile] }).catch((err) => {
+        expect(err).not.toBeNull();
       });
     })
   );
