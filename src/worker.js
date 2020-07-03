@@ -1,16 +1,11 @@
 const gdcm = require('../index')();
+const { expose } = require('threads/worker');
 
-module.exports = function (input, callback) {
+expose(async function (input) {
   const { command, args } = input;
   const processor = gdcm[command];
 
-  if (!processor) return callback(`Command ${command} not available`);
+  if (!processor) throw new Error(`Command ${command} not available`);
 
-  return processor({ args }, (err, output) => {
-    if (err) {
-      if (err instanceof Error) throw err;
-      throw new Error(err);
-    }
-    return callback(output);
-  });
-}
+  return processor({ args });
+});
