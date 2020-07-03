@@ -1,6 +1,6 @@
 {
   "name": "gdcm-node",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Node wrapper for GDCM DICOM library",
   "main": "index.js",
   "author": "Jason Hostetter MD",
